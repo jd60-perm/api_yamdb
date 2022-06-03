@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib import admin
 
 from .models import (
-     Comment, Review,
+    Comment, Review, Category, Genre, Title
 )
 
 
@@ -12,7 +12,7 @@ class CommentAdmin(admin.ModelAdmin):
         'pk',
         'text',
         'pub_date',
-        'author',
+        # 'author',
         'review',
     )
     search_fields = ('text',)
@@ -24,7 +24,7 @@ class ReviewAdmin(admin.ModelAdmin):
         'pk',
         'text',
         'pub_date',
-        'author',
+        # 'author',
         'score',
         'title',
     )
@@ -36,3 +36,6 @@ class ReviewAdmin(admin.ModelAdmin):
 
 admin.site.register(Review, ReviewAdmin)
 admin.site.register(Comment, CommentAdmin)
+admin.site.register(Category)
+admin.site.register(Genre)
+admin.site.register(Title)
