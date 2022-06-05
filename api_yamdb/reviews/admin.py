@@ -12,7 +12,7 @@ class CommentAdmin(admin.ModelAdmin):
         'pk',
         'text',
         'pub_date',
-        # 'author',
+        'author',
         'review',
     )
     search_fields = ('text',)
