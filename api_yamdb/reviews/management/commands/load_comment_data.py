@@ -2,7 +2,7 @@ from csv import DictReader
 from django.core.management import BaseCommand
 
 # Import the model 
-from reviews.models import Genre
+from reviews.models import Review, User, Comment
 
 
 ALREDY_LOADED_ERROR_MESSAGE = """
@@ -14,12 +14,12 @@ database with tables"""
 
 class Command(BaseCommand):
     # Show this when the user types help
-    help = "Loads data from genre.csv"
+    help = "Loads data from comments.csv"
 
     def handle(self, *args, **options):
     
         # Show this if the data already exist in the database
-        if Genre.objects.exists():
+        if Comment.objects.exists():
             print('data already loaded...exiting.')
             print(ALREDY_LOADED_ERROR_MESSAGE)
             return
@@ -29,7 +29,12 @@ class Command(BaseCommand):
 
 
         #Code to load the data into database
-        for row in DictReader(open('static/data/genre.csv', encoding='utf-8')):
-            genre=Genre(pk=row['id'], name=row['name'], slug=row['slug'])  
-            genre.save()
-            
+        for row in DictReader(open('static/data/comments.csv', encoding='utf-8')):
+            comment=Comment(
+                pk=row['id'],
+                review=Review.objects.get(pk=row['review_id']),
+                text=row['text'],
+                author=User.objects.get(pk=row['author']),
+                pub_date=row['pub_date'],
+            )  
+            comment.save()

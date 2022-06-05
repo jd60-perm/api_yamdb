@@ -68,6 +68,7 @@ class Category(models.Model):
     name = models.CharField(
         unique=True,
         max_length=256,
+        verbose_name='Наименование',
     )
     slug = models.SlugField(
         unique=True,
@@ -75,6 +76,8 @@ class Category(models.Model):
     )
 
     class Meta:
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
         ordering = ('-id',)
     
 
@@ -86,6 +89,7 @@ class Genre(models.Model):
     name = models.CharField(
         unique=True,
         max_length=256,
+        verbose_name='Наименование',
     )
     slug = models.SlugField(
         unique=True,
@@ -93,6 +97,8 @@ class Genre(models.Model):
     )
 
     class Meta:
+        verbose_name = 'Жанр'
+        verbose_name_plural = 'Жанры'
         ordering = ('-id',)
 
     def __str__(self):
@@ -100,14 +106,17 @@ class Genre(models.Model):
 
 
 class Title(models.Model):
-    name = models.TextField()
+    name = models.TextField(
+        verbose_name='Наименование',
+    )
     year = models.PositiveSmallIntegerField(
         validators=[
             MaxValueValidator(
                 limit_value=date.today().year,
                 message='Title\'s year can not be greater than current year',
             )
-        ]
+        ],
+        verbose_name='Год выпуска',
     )
     category = models.ForeignKey(
         Category,
@@ -115,117 +124,19 @@ class Title(models.Model):
         blank=True,
         null=True,
         related_name='titles',
+        verbose_name='Категория',
     )
-    genre = models.ManyToManyField(Genre)
-    description = models.TextField()
-
-    class Meta:
-        ordering = ('-id',)
-
-    def __str__(self):
-        return self.name[:15]
-
-
-class User(AbstractUser):
-    username = models.CharField(
-        'Логин пользователя',
-        max_length=200,
-        unique=True,
-        blank=False,
-        null=False,
+    genre = models.ManyToManyField(
+        Genre,
+        verbose_name='Жанр',
     )
-    email = models.EmailField(
-        'Адрес почты',
-        max_length=200,
-        unique=True,
-        blank=False,
-        null=False,
-    )
-    role = models.CharField(
-        'Роль пользователя',
-        max_length=200,
-        choices=USER_ROLES,
-        default='user'
-    )
-    bio = models.TextField(
-        'Биография',
-        blank=True,
-    )
-    first_name = models.CharField(
-        'Имя',
-        max_length=150,
-        blank=True, )
-    last_name = models.CharField(
-        'Фамилия',
-        max_length=150,
-        blank=True,
-    )
-
-    def __str__(self):
-        return self.username
-
-    @property
-    def is_user(self):
-        return self.role == USER_ROLES[1][1]
-
-    @property
-    def is_moderator(self):
-        return self.role == USER_ROLES[2][1]
-
-    @property
-    def is_admin(self):
-        return self.role == USER_ROLES[3][1]
-
-
-class Category(models.Model):
-    name = models.CharField(
-        unique=True,
-        max_length=256,
-    )
-    slug = models.SlugField(
-        unique=True,
-        max_length=50,
+    description = models.TextField(
+        verbose_name='Описание',
     )
 
     class Meta:
-        ordering = ('-id',)
-
-
-class Genre(models.Model):
-    name = models.CharField(
-        unique=True,
-        max_length=256,
-    )
-    slug = models.SlugField(
-        unique=True,
-        max_length=50,
-    )
-
-    class Meta:
-        ordering = ('-id',)
-
-
-class Title(models.Model):
-    name = models.TextField()
-    year = models.PositiveSmallIntegerField(
-        validators=[
-            MaxValueValidator(
-                limit_value=date.today().year,
-                message='Title\'s year can not be greater than current year',
-            )
-        ]
-    )
-    category = models.ForeignKey(
-        Category,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        related_name='titles',
-    )
-    genre = models.ManyToManyField(Genre)
-    description = models.TextField()
-
-    class Meta:
+        verbose_name = 'Произведение'
+        verbose_name_plural = 'Произведения'
         ordering = ('-id',)
 
     def __str__(self):

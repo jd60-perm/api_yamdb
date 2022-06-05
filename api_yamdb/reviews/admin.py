@@ -47,14 +47,12 @@ class CategoryGenreAdmin(admin.ModelAdmin):
     list_display = ('pk', 'name', 'slug',)
     search_fields = ('name',)
     list_filter = ('name',)
-    list_editable = ('name',)
 
 
 class TitleAdmin(admin.ModelAdmin):
     list_display = ('pk', 'name', 'year', 'category', 'description',)
     search_fields = ('name','description',)
     list_filter = ('name', 'description',)
-    list_editable = ('name',)
 
 
 admin.site.register(Review, ReviewAdmin)
