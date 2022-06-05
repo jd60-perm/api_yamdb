@@ -48,3 +48,4 @@ admin.site.register(Comment, CommentAdmin)
 admin.site.register(Category)
 admin.site.register(Genre)
 admin.site.register(Title)
+
