@@ -12,7 +12,7 @@ class CommentAdmin(admin.ModelAdmin):
         'pk',
         'text',
         'pub_date',
-        # 'author',
+        'author',
         'review',
     )
     search_fields = ('review', 'author',)
@@ -43,9 +43,20 @@ class UserAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
+class CategoryGenreAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'name', 'slug',)
+    search_fields = ('name',)
+    list_filter = ('name',)
+
+
+class TitleAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'name', 'year', 'category', 'description',)
+    search_fields = ('name','description',)
+    list_filter = ('name', 'description',)
+
+
 admin.site.register(Review, ReviewAdmin)
 admin.site.register(Comment, CommentAdmin)
-admin.site.register(Category)
-admin.site.register(Genre)
-admin.site.register(Title)
-
+admin.site.register(Category, CategoryGenreAdmin)
+admin.site.register(Genre, CategoryGenreAdmin)
+admin.site.register(Title, TitleAdmin)
