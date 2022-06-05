@@ -43,9 +43,22 @@ class UserAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
+class CategoryGenreAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'name', 'slug',)
+    search_fields = ('name',)
+    list_filter = ('name',)
+    list_editable = ('name',)
+
+
+class TitleAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'name', 'year', 'category', 'description',)
+    search_fields = ('name','description',)
+    list_filter = ('name', 'description',)
+    list_editable = ('name',)
+
+
 admin.site.register(Review, ReviewAdmin)
 admin.site.register(Comment, CommentAdmin)
-admin.site.register(Category)
-admin.site.register(Genre)
-admin.site.register(Title)
-
+admin.site.register(Category, CategoryGenreAdmin)
+admin.site.register(Genre, CategoryGenreAdmin)
+admin.site.register(Title, TitleAdmin)

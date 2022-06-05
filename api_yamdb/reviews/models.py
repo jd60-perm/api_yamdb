@@ -76,6 +76,10 @@ class Category(models.Model):
 
     class Meta:
         ordering = ('-id',)
+    
+
+    def __str__(self):
+        return self.name[:15]
 
 
 class Genre(models.Model):
@@ -90,6 +94,9 @@ class Genre(models.Model):
 
     class Meta:
         ordering = ('-id',)
+
+    def __str__(self):
+        return self.name[:15]
 
 
 class Title(models.Model):
