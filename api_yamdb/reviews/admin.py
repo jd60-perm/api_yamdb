@@ -15,8 +15,8 @@ class CommentAdmin(admin.ModelAdmin):
         'author',
         'review',
     )
-    search_fields = ('text',)
-    list_filter = ('pub_date',)
+    search_fields = ('review', 'author',)
+    list_filter = ('review', 'author',)
 
 
 class ReviewAdmin(admin.ModelAdmin):
@@ -28,10 +28,10 @@ class ReviewAdmin(admin.ModelAdmin):
         'score',
         'title',
     )
-    list_editable = ('title',)
-    search_fields = ('text',)
-    list_filter = ('pub_date',)
-    empty_value_display = '-empty-'
+    #list_editable = ('title',)
+    search_fields = ('title',)
+    list_filter = ('title', 'author')
+    #empty_value_display = '-empty-'
 
 
 @admin.register(User)
@@ -48,3 +48,4 @@ admin.site.register(Comment, CommentAdmin)
 admin.site.register(Category)
 admin.site.register(Genre)
 admin.site.register(Title)
+
