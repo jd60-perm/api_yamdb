@@ -16,23 +16,23 @@ USER_ROLES = [
 class User(AbstractUser):
     username = models.CharField(
         'Логин пользователя',
-        max_length=200,
+        max_length=150,
         unique=True,
         blank=False,
         null=False,
     )
     email = models.EmailField(
         'Адрес почты',
-        max_length=200,
+        max_length=254,
         unique=True,
         blank=False,
         null=False,
     )
     role = models.CharField(
         'Роль пользователя',
-        max_length=200,
         choices=USER_ROLES,
-        default='user'
+        default='user',
+        max_length=20,
     )
     bio = models.TextField(
         'Биография',
@@ -47,21 +47,25 @@ class User(AbstractUser):
         max_length=150,
         blank=True,
     )
+    confirmation_code = models.CharField(
+        'Код подтверждения',
+        max_length=20,
+    )
 
     def __str__(self):
         return self.username
 
     @property
     def is_user(self):
-        return self.role == USER_ROLES[1][1]
+        return self.role == USER_ROLES[0][1]
 
     @property
     def is_moderator(self):
-        return self.role == USER_ROLES[2][1]
+        return self.role == USER_ROLES[1][1]
 
     @property
     def is_admin(self):
-        return self.role == USER_ROLES[3][1]
+        return self.role == USER_ROLES[2][1]
 
 
 class Category(models.Model):
