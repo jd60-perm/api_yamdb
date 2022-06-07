@@ -16,6 +16,8 @@ class UserSerializer(serializers.ModelSerializer):
             'first_name', 'last_name', 'username', 'bio', 'email', 'role'
         )
         model = User
+        validators = []
+
 
 class CommentSerializer(serializers.ModelSerializer):
     author = SlugRelatedField(slug_field='username', read_only=True)
@@ -44,4 +46,3 @@ class ReviewSerializer(serializers.ModelSerializer):
                 author=author, title__id=title_id).exists():
             raise ValidationError('Вы уже написали отзыв.')
         return data
-
