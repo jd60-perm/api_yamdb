@@ -16,7 +16,7 @@ class AuthorStaffOrReadOnly(IsAuthenticatedOrReadOnly):
             or request.user == obj.author
         )
 
-      
+  
 class IsAuthorOrModeratorOrAdminOrReadOnly(
     permissions.IsAuthenticatedOrReadOnly
 ):
@@ -35,4 +35,13 @@ class AdminOrReadOnly(BasePermission):
             request.method in 'GET'
             or request.user.is_authenticated
             and request.user.is_admin
+        )
+
+
+class AdminOrGetMethod(BasePermission):
+
+    def has_permission(self, request, view):
+        return (
+            request.method in 'GET'
+            or request.user.is_admin
         )

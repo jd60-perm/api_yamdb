@@ -1,23 +1,27 @@
 from django.shortcuts import get_object_or_404
-
 from rest_framework.viewsets import ModelViewSet
 import secrets
 import string
 from smtplib import SMTPException
-
+from django_filters.rest_framework import DjangoFilterBackend
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
-from rest_framework import status, viewsets, permissions
+from rest_framework import filters, mixins, status, viewsets, permissions
 from rest_framework.decorators import api_view, action
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from api.permissions import  AuthorStaffOrReadOnly, IsAdmin
+from api.permissions import AuthorStaffOrReadOnly, IsAdmin, AdminOrGetMethod
 from api.serializers import (
-     UserSerializer, CommentSerializer, ReviewSerializer)
-from reviews.models import Review, Title, User
+    TitleSerializer, GenreSerializer, CategorySerializer,
+    UserSerializer, CommentSerializer, ReviewSerializer)
+from reviews.models import Review, Title, User, Title, Genre, Category
 
 from api_yamdb.settings import YAMBD_EMAIL
+
+
+from reviews import models
+from . import serializers, permissions
 
 
 LENGTH_OF_CONF_CODE = 20
@@ -129,3 +133,35 @@ class UserViewSet(viewsets.ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save(role=request.user.role)
             return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class TitleViewSet(viewsets.ModelViewSet):
+    queryset = Title.objects.all()
+    serializer_class = TitleSerializer
+    permission_classes = (AdminOrGetMethod,)
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ('category__slug', 'genre__slug', 'name', 'year')
+
+
+class GenreViewSet(
+    mixins.DestroyModelMixin, mixins.ListModelMixin,
+    mixins.CreateModelMixin, viewsets.GenericViewSet
+):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
+    permission_classes = (AdminOrGetMethod,)
+    lookup_field = 'slug'
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
+
+
+class CategoryViewSet(
+    mixins.DestroyModelMixin, mixins.ListModelMixin,
+    mixins.CreateModelMixin, viewsets.GenericViewSet
+):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = (AdminOrGetMethod,)
+    lookup_field = 'slug'
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
