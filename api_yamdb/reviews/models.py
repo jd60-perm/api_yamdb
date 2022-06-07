@@ -57,15 +57,15 @@ class User(AbstractUser):
 
     @property
     def is_user(self):
-        return self.role == USER_ROLES[1][1]
+        return self.role == USER_ROLES[0][1]
 
     @property
     def is_moderator(self):
-        return self.role == USER_ROLES[2][1]
+        return self.role == USER_ROLES[1][1]
 
     @property
     def is_admin(self):
-        return self.role == USER_ROLES[3][1]
+        return self.role == USER_ROLES[2][1]
 
 
 class Category(models.Model):
