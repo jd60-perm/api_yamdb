@@ -1,3 +1,6 @@
+from django.shortcuts import get_object_or_404
+
+from rest_framework.viewsets import ModelViewSet
 import secrets
 import string
 from smtplib import SMTPException
@@ -8,13 +11,47 @@ from rest_framework.response import Response
 from rest_framework import status, viewsets, permissions
 from rest_framework.decorators import api_view, action
 from rest_framework_simplejwt.tokens import RefreshToken
-from reviews.models import User
 
-from .serializers import UserSerializer
+from api.permissions import  AuthorStaffOrReadOnly, IsAdmin
+from api.serializers import (
+     UserSerializer, CommentSerializer, ReviewSerializer)
+from reviews.models import Review, Title, User
+
 from api_yamdb.settings import YAMBD_EMAIL
-from api.permissions import IsAdmin
+
 
 LENGTH_OF_CONF_CODE = 20
+
+
+
+class ReviewViewSet(ModelViewSet):
+    serializer_class = ReviewSerializer
+    permission_classes = (AuthorStaffOrReadOnly,)
+
+    def get_queryset(self):
+        title_id = self.kwargs.get('title_id')
+        title = get_object_or_404(Title, id=title_id)
+        return title.reviews.all()
+
+    def perform_create(self, serializer):
+        title_id = self.kwargs.get('title_id')
+        title = get_object_or_404(Title, id=title_id)
+        serializer.save(author=self.request.user, title=title)
+
+
+class CommentViewSet(ModelViewSet):
+    serializer_class = CommentSerializer
+    permission_classes = (AuthorStaffOrReadOnly,)
+
+    def get_queryset(self):
+        review_id = self.kwargs.get('review_id')
+        review = get_object_or_404(Review, id=review_id)
+        return review.comments.all()
+
+    def perform_create(self, serializer):
+        review_id = self.kwargs.get('review_id')
+        review = get_object_or_404(Review, id=review_id)
+        serializer.save(author=self.request.user, review=review)
 
 
 @api_view(['POST'])
