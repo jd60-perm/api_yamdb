@@ -65,7 +65,10 @@ class User(AbstractUser):
 
     @property
     def is_admin(self):
-        return self.role == USER_ROLES[2][1]
+        return self.role == USER_ROLES[2][1] or self.is_superuser
+
+    class Meta:
+        ordering = ['id']
 
 
 class Category(models.Model):
@@ -83,7 +86,6 @@ class Category(models.Model):
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
         ordering = ('-id',)
-    
 
     def __str__(self):
         return self.name[:15]
@@ -150,7 +152,6 @@ class Title(models.Model):
 class Review(models.Model):
     MARKS = [(i, str(i)) for i in range(1, 11)]
 
-
     title = models.ForeignKey(
         to=Title,
         on_delete=models.CASCADE,
@@ -194,6 +195,7 @@ class Review(models.Model):
 
     def __str__(self):
         return f'{self.author}: {self.text[:33]}'
+
 
 class Comment(models.Model):
      
