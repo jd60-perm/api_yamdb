@@ -46,5 +46,6 @@ class AdminOrGetMethod(BasePermission):
         return request.method in 'GET'
 
 
-class IsAuthenticated(BasePermission):
-    pass
+class IsSuperUser(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.is_superuser
