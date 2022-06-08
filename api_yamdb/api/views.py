@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework import filters, mixins, status, viewsets, permissions
 from rest_framework.decorators import api_view, action
 from rest_framework_simplejwt.tokens import RefreshToken
-
+from rest_framework.permissions import IsAuthenticated
 from api.permissions import AuthorStaffOrReadOnly, IsAdmin, AdminOrGetMethod
 from api.serializers import (
     TitleSerializer, GenreSerializer, CategorySerializer,
@@ -68,12 +68,15 @@ def send_confirmation_code(request):
             {"result": "Пользователь с такими данными уже существует."},
             status=status.HTTP_400_BAD_REQUEST
         )
+    if username == 'me':
+        return Response('Нельзя создать пользователя с ником me',
+                        status=status.HTTP_400_BAD_REQUEST)
     data = {
         'email': email,
         'username': username
     }
     serializer = UserSerializer(data=data)
-    serializer.is_valid()
+    serializer.is_valid(raise_exception=True)
     serializer.save()
     letters_and_digits = string.ascii_letters + string.digits
     confirmation_code = ''.join(secrets.choice(
@@ -118,7 +121,7 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdmin]
     search_fields = ['username', ]
 
-    @action(detail=False, permission_classes=(permissions.IsAuthenticated,),
+    @action(detail=False, permission_classes=(IsAuthenticated,),
             methods=['GET', 'PATCH'], url_path='me')
     def get_yourself_info(self, request):
         if request.method == 'GET':
