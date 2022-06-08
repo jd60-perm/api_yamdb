@@ -20,10 +20,6 @@ from reviews.models import Review, Title, User, Title, Genre, Category
 from api_yamdb.settings import YAMBD_EMAIL
 
 
-from reviews import models
-from . import serializers, permissions
-
-
 LENGTH_OF_CONF_CODE = 20
 
 
@@ -138,7 +134,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
-    permission_classes = (AdminOrGetMethod,)
+    permission_classes = (permissions.AllowAny,) # (AdminOrGetMethod,)
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ('category__slug', 'genre__slug', 'name', 'year')
 

@@ -41,7 +41,10 @@ class AdminOrReadOnly(BasePermission):
 class AdminOrGetMethod(BasePermission):
 
     def has_permission(self, request, view):
-        return (
-            request.method in 'GET'
-            or request.user.is_admin
-        )
+        if request.user.is_authenticated:
+            return request.method in 'GET' or request.user.is_admin
+        return request.method in 'GET'
+
+
+class IsAuthenticated(BasePermission):
+    pass
