@@ -182,7 +182,7 @@ class Review(models.Model):
     )
 
     class Meta:
-       
+
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
         ordering = ('-title', '-id')
@@ -196,7 +196,7 @@ class Review(models.Model):
 
 
 class Comment(models.Model):
-     
+
     review = models.ForeignKey(
         to=Review,
         on_delete=models.CASCADE,
@@ -214,7 +214,7 @@ class Comment(models.Model):
         verbose_name='Дата комментирования')
 
     class Meta:
-        
+
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
         ordering = ('-review', '-id',)

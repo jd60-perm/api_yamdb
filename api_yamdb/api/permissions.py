@@ -16,7 +16,7 @@ class AuthorStaffOrReadOnly(IsAuthenticatedOrReadOnly):
             or request.user == obj.author
         )
 
-  
+
 class IsAuthorOrModeratorOrAdminOrReadOnly(
     permissions.IsAuthenticatedOrReadOnly
 ):

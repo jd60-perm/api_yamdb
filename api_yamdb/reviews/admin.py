@@ -24,10 +24,8 @@ class ReviewAdmin(admin.ModelAdmin):
         'score',
         'title',
     )
-    #list_editable = ('title',)
     search_fields = ('title',)
     list_filter = ('title', 'author')
-    #empty_value_display = '-empty-'
 
 
 @admin.register(User)
@@ -47,7 +45,7 @@ class CategoryGenreAdmin(admin.ModelAdmin):
 
 class TitleAdmin(admin.ModelAdmin):
     list_display = ('pk', 'name', 'year', 'category', 'description',)
-    search_fields = ('name','description',)
+    search_fields = ('name', 'description',)
     list_filter = ('name', 'description',)
 
 
