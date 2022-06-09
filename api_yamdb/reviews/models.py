@@ -148,7 +148,6 @@ class Title(models.Model):
 
 
 class Review(models.Model):
-    MARKS = [(i, str(i)) for i in range(1, 11)]
 
     title = models.ForeignKey(
         to=Title,
@@ -163,9 +162,8 @@ class Review(models.Model):
         on_delete=models.CASCADE,
         related_name='reviews',
         verbose_name='Автор отзыва')
-    score = models.CharField(
+    score = models.PositiveSmallIntegerField(
         max_length=1,
-        choices=MARKS,
         verbose_name='Оценка произведения',
         validators=(
             MaxValueValidator(
@@ -182,7 +180,6 @@ class Review(models.Model):
     )
 
     class Meta:
-
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
         ordering = ('-title', '-id')
@@ -214,7 +211,6 @@ class Comment(models.Model):
         verbose_name='Дата комментирования')
 
     class Meta:
-
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
         ordering = ('-review', '-id',)
