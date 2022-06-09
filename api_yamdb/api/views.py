@@ -2,7 +2,6 @@ import secrets
 import string
 from smtplib import SMTPException
 
-import django_filters
 from api.permissions import AdminOrGetMethod, AuthorStaffOrReadOnly, IsAdmin
 from api.serializers import (CategorySerializer, CommentSerializer,
                              GenreSerializer, ReviewSerializer,
@@ -11,7 +10,7 @@ from api.serializers import (CategorySerializer, CommentSerializer,
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, mixins, status, viewsets
+from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action, api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -20,6 +19,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from reviews.models import Category, Genre, Review, Title, User
 
 from api_yamdb.settings import YAMBD_EMAIL
+
+from .filters import TitleFilter
+from .mixins import PostListDelMixin
 
 LENGTH_OF_CONF_CODE = 20
 
@@ -134,20 +136,6 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class TitleFilter(django_filters.FilterSet):
-    category = django_filters.Filter(
-        field_name='category__slug', lookup_expr='exact'
-    )
-    genre = django_filters.Filter(
-        field_name='genre__slug', lookup_expr='exact'
-    )
-    name = django_filters.Filter(field_name='name', lookup_expr='contains')
-
-    class Meta:
-        model = Title
-        fields = ('category', 'genre', 'year', 'name')
-
-
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
@@ -161,10 +149,7 @@ class TitleViewSet(viewsets.ModelViewSet):
         return TitleReadSerializer
 
 
-class GenreViewSet(
-    mixins.DestroyModelMixin, mixins.ListModelMixin,
-    mixins.CreateModelMixin, viewsets.GenericViewSet
-):
+class GenreViewSet(PostListDelMixin):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     permission_classes = (AdminOrGetMethod,)
@@ -173,10 +158,7 @@ class GenreViewSet(
     search_fields = ('name',)
 
 
-class CategoryViewSet(
-    mixins.DestroyModelMixin, mixins.ListModelMixin,
-    mixins.CreateModelMixin, viewsets.GenericViewSet
-):
+class CategoryViewSet(PostListDelMixin):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = (AdminOrGetMethod,)

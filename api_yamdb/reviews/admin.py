@@ -3,6 +3,7 @@ from django.contrib import admin
 from .models import Category, Comment, Genre, Review, Title, User
 
 
+@admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display = (
         'pk',
@@ -15,6 +16,7 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ('review', 'author',)
 
 
+@admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
     list_display = (
         'pk',
@@ -37,20 +39,22 @@ class UserAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
+@admin.register(Category)
 class CategoryGenreAdmin(admin.ModelAdmin):
     list_display = ('pk', 'name', 'slug',)
     search_fields = ('name',)
     list_filter = ('name',)
 
 
+@admin.register(Title)
 class TitleAdmin(admin.ModelAdmin):
     list_display = ('pk', 'name', 'year', 'category', 'description',)
     search_fields = ('name', 'description',)
     list_filter = ('name', 'description',)
 
 
-admin.site.register(Review, ReviewAdmin)
-admin.site.register(Comment, CommentAdmin)
-admin.site.register(Category, CategoryGenreAdmin)
-admin.site.register(Genre, CategoryGenreAdmin)
-admin.site.register(Title, TitleAdmin)
+@admin.register(Genre)
+class GenreAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'name', 'slug',)
+    search_fields = ('name',)
+    list_filter = ('name',)
