@@ -1,6 +1,6 @@
 from rest_framework import permissions
-from rest_framework.permissions import (
-    IsAuthenticatedOrReadOnly, BasePermission)
+from rest_framework.permissions import (BasePermission,
+                                        IsAuthenticatedOrReadOnly)
 
 
 class IsAdmin(permissions.BasePermission):
