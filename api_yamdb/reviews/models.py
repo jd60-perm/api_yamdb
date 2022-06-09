@@ -4,21 +4,14 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
-USER_ROLES = [
-    ('user', 'user'),
-    ('moderator', 'moderator'),
-    ('admin', 'admin')
-]
-
 
 class User(AbstractUser):
-    username = models.CharField(
-        'Логин пользователя',
-        max_length=150,
-        unique=True,
-        blank=False,
-        null=False,
-    )
+    USER_ROLES = [
+        ('user', 'user'),
+        ('moderator', 'moderator'),
+        ('admin', 'admin')
+    ]
+
     email = models.EmailField(
         'Адрес почты',
         max_length=254,
@@ -36,37 +29,28 @@ class User(AbstractUser):
         'Биография',
         blank=True,
     )
-    first_name = models.CharField(
-        'Имя',
-        max_length=150,
-        blank=True, )
-    last_name = models.CharField(
-        'Фамилия',
-        max_length=150,
-        blank=True,
-    )
     confirmation_code = models.CharField(
         'Код подтверждения',
         max_length=20,
     )
+
+    class Meta:
+        ordering = ['id',]
 
     def __str__(self):
         return self.username
 
     @property
     def is_user(self):
-        return self.role == USER_ROLES[0][1]
+        return self.role == self.USER_ROLES[0][1]
 
     @property
     def is_moderator(self):
-        return self.role == USER_ROLES[1][1]
+        return self.role == self.USER_ROLES[1][1]
 
     @property
     def is_admin(self):
-        return self.role == USER_ROLES[2][1] or self.is_superuser
-
-    class Meta:
-        ordering = ['id']
+        return self.role == self.USER_ROLES[2][1] or self.is_superuser
 
 
 class Category(models.Model):

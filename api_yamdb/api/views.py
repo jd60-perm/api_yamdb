@@ -18,12 +18,10 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 from reviews.models import Category, Genre, Review, Title, User
 
-from api_yamdb.settings import YAMBD_EMAIL
+from api_yamdb.settings import YAMBD_EMAIL, LENGTH_OF_CONF_CODE
 
 from .filters import TitleFilter
 from .mixins import PostListDelMixin
-
-LENGTH_OF_CONF_CODE = 20
 
 
 class ReviewViewSet(ModelViewSet):
