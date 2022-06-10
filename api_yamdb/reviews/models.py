@@ -35,7 +35,7 @@ class User(AbstractUser):
     )
 
     class Meta:
-        ordering = ['id', ]
+        ordering = ('id', )
 
     def __str__(self):
         return self.username
@@ -147,7 +147,6 @@ class Review(models.Model):
         related_name='reviews',
         verbose_name='Автор отзыва')
     score = models.PositiveSmallIntegerField(
-        max_length=1,
         verbose_name='Оценка произведения',
         validators=(
             MaxValueValidator(
